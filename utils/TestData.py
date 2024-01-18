@@ -8,3 +8,6 @@ class TestData:
         W_PASS = os.environ["W_PASS"]
     except KeyError as e:
         raise RuntimeError("Could not find a W_USER or W_PASS in environment") from e
+    
+    H1_LOGIN = 'Inside ADManager Plus'
+    CHANGE_SUCCESS = 'Successfully'

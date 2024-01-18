@@ -7,10 +7,12 @@ class TestFlowReset(TestBase):
     
     def test_flow_reset_windows_password(self):
         
+        user = 'lopezjuanc'
+        clave = 'P455_t1g0#bo'
         self.loginpage.signIn(TestData.W_USER, TestData.W_PASS)
         self.homepage.do_click_reset_password_console()
         self.managementpage.do_click_lupa()
-        self.managementpage.do_send_username("villartem")
+        self.managementpage.do_send_username(user)
         time.sleep(2)
         
         tname = self.managementpage.get_table_name()
@@ -20,8 +22,12 @@ class TestFlowReset(TestBase):
         print(type(tname),type(tuser), type(touname))
         if len(tname) == len(tuser) == len(touname):
             for i in range(len(tname)):
-                if tuser[i].text.strip() == "villartem":
+                if tuser[i].text.strip() == user:
                     print(tname[i].text, tuser[i].text, touname[i].text)
-        
-        assert False == True
-        
+                    self.managementpage.do_click_apply_reset(int(i+1))
+                    time.sleep(2)
+                    self.managementpage.do_change_password(clave)
+                    time.sleep(2)
+                    assert TestData.CHANGE_SUCCESS in self.managementpage.get_text_successfull(int(i+1))
+        else:
+            assert False, "la cantidad de elementos no es la misma"

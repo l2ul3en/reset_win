@@ -6,5 +6,5 @@ class TestLogin(TestBase):
 
     def test_doLogin(self):
         self.login_Page = LoginPage(self.driver)
-        self.login_Page.signIn(TestData.USERNAME, TestData.PASSWORD)
-        assert self.login_Page.verifyLogin() == 'Inside ADManager Plus'
+        self.login_Page.signIn(TestData.W_USER, TestData.W_PASS)
+        assert self.login_Page.verifyLogin() == TestData.H1_LOGIN

@@ -1,6 +1,7 @@
 from selenium.webdriver.common.by import By
 from pages.BasePage import BasePage
 from selenium.webdriver.common.keys import Keys
+import time
 
 class ManagementPage(BasePage):
     btn_lupa = (By.XPATH, "//li[@class='search-field']/i")
@@ -10,8 +11,11 @@ class ManagementPage(BasePage):
     table_user = (By.XPATH, "//table[@id='resultList']/tbody/tr/td[2]")
     table_name = (By.XPATH, "//table[@id='resultList']/tbody/tr/td[3]")
     table_ouname = (By.XPATH, "//table[@id='resultList']/tbody/tr/td[4]")
-
-    btn_reset = (By.XPATH, "//table[@id='resultList']//td[6]//a")
+    input_reset_pass = (By.ID, "password")
+    input_reset_confirm_pass = (By.ID, "confirmPassword")
+    checkbox_reset_nextlogon = (By.ID, "nextlogon")
+    btn_reset_save = (By.ID, "save")
+    #btn_reset = (By.XPATH, "//table[@id='resultList']//td[6]//a")
 
     def __init__(self, driver):
         super().__init__(driver)
@@ -22,8 +26,9 @@ class ManagementPage(BasePage):
     def do_click_close_textbox(self):
         self.click(self.btn_close_search)
 
-    def do_click_reset(self):
-        self.click(self.btn_reset)
+    def do_click_apply_reset(self,pos: int):
+        btn_reset = (By.XPATH, f"//table[@id='resultList']//tr[{pos}]/td[6]//a")
+        self.click(btn_reset)
 
     def get_table_name(self):
         if self.is_visible(self.table_name):
@@ -44,3 +49,16 @@ class ManagementPage(BasePage):
     def do_send_username(self, username):
         self.type(self.input_search, username)
         self.type(self.input_search, Keys.RETURN)
+
+    def do_change_password(self,password):
+        self.type(self.input_reset_pass, password)
+        self.type(self.input_reset_confirm_pass, password)
+        check_box = self.find(self.checkbox_reset_nextlogon)
+        if check_box.is_selected():
+            self.click(self.checkbox_reset_nextlogon)
+            #time.sleep(2)
+        #self.click(self.btn_reset_save)
+
+    def get_text_successfull(self,pos: int):
+        msg = (By.XPATH, f"//table[@id='resultList']//tr[{pos}]/td[6]//table[@class='statusmsgtable']//td[contains(text(),'Successfully')]")
+        return self.get_element_text(msg)
