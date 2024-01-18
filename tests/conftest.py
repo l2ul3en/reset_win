@@ -23,7 +23,7 @@ def init_driver(request):
 
     #Maximizar la ventana y abrir url
     web_driver.maximize_window()
-    web_driver.get(TestData.URL)
+    web_driver.get(TestData.W_URL)
     
     # Establecer el atributos en la instancia de la clase de prueba
     request.cls.driver = web_driver

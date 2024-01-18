@@ -7,7 +7,7 @@ class TestFlowReset(TestBase):
     
     def test_flow_reset_windows_password(self):
         
-        self.loginpage.signIn(TestData.USERNAME, TestData.PASSWORD)
+        self.loginpage.signIn(TestData.W_USER, TestData.W_PASS)
         self.homepage.do_click_reset_password_console()
         self.managementpage.do_click_lupa()
         self.managementpage.do_send_username("villartem")
