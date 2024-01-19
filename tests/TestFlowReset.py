@@ -1,14 +1,11 @@
 import time
-from pages.LoginPage import LoginPage
+#from pages.LoginPage import LoginPage
 from tests.TestBase import TestBase
 from utils.TestData import TestData
 
 class TestFlowReset(TestBase):
     
-    def test_flow_reset_windows_password(self):
-        
-        user = 'lopezjuanc'
-        clave = 'P455_t1g0#bo'
+    def test_flow_reset_windows_password(self, user, clave):
         self.loginpage.signIn(TestData.W_USER, TestData.W_PASS)
         self.homepage.do_click_reset_password_console()
         self.managementpage.do_click_lupa()
@@ -26,8 +23,10 @@ class TestFlowReset(TestBase):
                     print(tname[i].text, tuser[i].text, touname[i].text)
                     self.managementpage.do_click_apply_reset(int(i+1))
                     time.sleep(2)
+                    self.driver.save_screenshot('./screenshot/img-tst1.png')
                     self.managementpage.do_change_password(clave)
                     time.sleep(2)
+                    self.driver.save_screenshot('./screenshot/img-tst3.png')
                     assert TestData.CHANGE_SUCCESS in self.managementpage.get_text_successfull(int(i+1))
         else:
             assert False, "la cantidad de elementos no es la misma"

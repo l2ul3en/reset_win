@@ -13,7 +13,8 @@ class ManagementPage(BasePage):
     table_ouname = (By.XPATH, "//table[@id='resultList']/tbody/tr/td[4]")
     input_reset_pass = (By.ID, "password")
     input_reset_confirm_pass = (By.ID, "confirmPassword")
-    checkbox_reset_nextlogon = (By.ID, "nextlogon")
+    checkbox_reset_nextlogon = (By.XPATH, "//label[@class='checkbox-inline']//input")
+    select_checkbox_reset_nextlogon = (By.XPATH, "//label[@class='checkbox-inline']//ins")
     btn_reset_save = (By.ID, "save")
     #btn_reset = (By.XPATH, "//table[@id='resultList']//td[6]//a")
 
@@ -54,11 +55,16 @@ class ManagementPage(BasePage):
         self.type(self.input_reset_pass, password)
         self.type(self.input_reset_confirm_pass, password)
         check_box = self.find(self.checkbox_reset_nextlogon)
+        text_box = self.find(self.select_checkbox_reset_nextlogon)
         if check_box.is_selected():
-            self.click(self.checkbox_reset_nextlogon)
-            #time.sleep(2)
-        #self.click(self.btn_reset_save)
+            text_box.click()
+            self.driver.save_screenshot('./screenshot/img-tst2.png')
+        self.click(self.btn_reset_save)
 
     def get_text_successfull(self,pos: int):
         msg = (By.XPATH, f"//table[@id='resultList']//tr[{pos}]/td[6]//table[@class='statusmsgtable']//td[contains(text(),'Successfully')]")
+        return self.get_element_text(msg)
+    
+    def get_text_error(self,pos: int):
+        msg = (By.XPATH, f"//table[@id='resultList']//tr[{pos}]/td[6]//table[@class='statusmsgtable']//td[contains(text(),'Error')]")
         return self.get_element_text(msg)
