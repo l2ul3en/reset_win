@@ -16,7 +16,8 @@ class ManagementPage(BasePage):
     checkbox_reset_nextlogon = (By.XPATH, "//label[@class='checkbox-inline']//input")
     select_checkbox_reset_nextlogon = (By.XPATH, "//label[@class='checkbox-inline']//ins")
     btn_reset_save = (By.ID, "save")
-    #btn_reset = (By.XPATH, "//table[@id='resultList']//td[6]//a")
+    btn_perfil = (By.XPATH, "//li[@class != 'dropdown']/a[@class='dropdown-toggle']")
+    btn_logout = (By.CSS_SELECTOR, "i.icn-logout")
 
     def __init__(self, driver):
         super().__init__(driver)
@@ -68,3 +69,7 @@ class ManagementPage(BasePage):
     def get_text_error(self,pos: int):
         msg = (By.XPATH, f"//table[@id='resultList']//tr[{pos}]/td[6]//table[@class='statusmsgtable']//td[contains(text(),'Error')]")
         return self.get_element_text(msg)
+    
+    def do_logout(self):
+        self.click(self.btn_perfil)
+        self.click(self.btn_logout)

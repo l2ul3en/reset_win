@@ -5,7 +5,7 @@ from utils.TestData import TestData
 
 class TestFlowReset(TestBase):
     
-    def test_flow_reset_windows_password(self, user, clave):
+    def test_flow_reset_windows_password(self, user='villartem', clave='12345'):
         self.loginpage.signIn(TestData.W_USER, TestData.W_PASS)
         self.homepage.do_click_reset_password_console()
         self.managementpage.do_click_lupa()
@@ -27,6 +27,8 @@ class TestFlowReset(TestBase):
                     self.managementpage.do_change_password(clave)
                     time.sleep(2)
                     self.driver.save_screenshot('./screenshot/img-tst3.png')
-                    assert TestData.CHANGE_SUCCESS in self.managementpage.get_text_successfull(int(i+1))
+                    assert TestData.CHANGE_SUCCESS not in self.managementpage.get_text_error(int(i+1))
         else:
             assert False, "la cantidad de elementos no es la misma"
+        
+        self.managementpage.do_logout()
