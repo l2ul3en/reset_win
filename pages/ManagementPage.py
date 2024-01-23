@@ -25,6 +25,9 @@ class ManagementPage(BasePage):
     def do_click_lupa(self):
         self.click(self.btn_lupa)
 
+    def clear_textbox(self):
+        self.clear(self.input_search)
+
     def do_click_close_textbox(self):
         self.click(self.btn_close_search)
 
@@ -59,7 +62,6 @@ class ManagementPage(BasePage):
         text_box = self.find(self.select_checkbox_reset_nextlogon)
         if check_box.is_selected():
             text_box.click()
-            self.driver.save_screenshot('./screenshot/img-tst2.png')
         self.click(self.btn_reset_save)
 
     def get_text_successfull(self,pos: int):

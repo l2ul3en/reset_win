@@ -3,3 +3,5 @@ __pycache__/
 .venv/
 .reset_win/
 screenshot/
+win_users.txt
+*.log
