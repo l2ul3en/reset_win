@@ -1,7 +1,6 @@
 from selenium.webdriver.common.by import By
 from pages.BasePage import BasePage
 from selenium.webdriver.common.keys import Keys
-import time
 
 class ManagementPage(BasePage):
     btn_lupa = (By.XPATH, "//li[@class='search-field']/i")

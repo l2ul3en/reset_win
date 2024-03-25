@@ -1,2 +1,5 @@
 import pytest
-pytest.main([r'.\tests\TestFlowReset.py', '-s'])
+from pathlib import PurePath
+
+path = PurePath('tests','TestFlowReset.py')
+pytest.main([str(path), '-s'])

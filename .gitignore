@@ -5,3 +5,5 @@ __pycache__/
 screenshot/
 win_users.txt
 *.log
+*.csv
+*.toml

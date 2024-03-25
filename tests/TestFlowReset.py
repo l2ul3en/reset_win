@@ -3,6 +3,8 @@ from utils.TestData import TestData
 from time import sleep
 from random import randint
 from faker import Faker
+from datetime import datetime
+from csv import DictWriter, Sniffer
 
 class TestFlowReset(TestBase):
 
@@ -17,12 +19,42 @@ class TestFlowReset(TestBase):
     def _procesar_data(self,tname: list , tuser: list, touname: list, user: str, clave: str) -> None:
         for i in range(len(tname)):
             if tuser[i].text.strip().lower() == user.lower():
-                print(tname[i].text, tuser[i].text, touname[i].text)
-                self.managementpage.do_click_apply_reset(int(i+1))
-                sleep(2)
-                self.managementpage.do_change_password(clave)
-                sleep(2)
-                print(f"la clave del usuario {user} es {clave}")
+                now = datetime.now()
+                date_ini= datetime.strftime(now, "%d/%m/%Y")
+                hour_ini= datetime.strftime(now, "%H:%M:%S")
+
+                with open(TestData.CSV_FILE, 'a+', newline='') as csvfile:
+                    csvfile.seek(0)
+                    first_line = csvfile.readline()
+                    if first_line == '':
+                        existe_header = False
+                        writer = DictWriter(csvfile, TestData.CSV_HEADERS, delimiter=TestData.SEP_FIELDS)
+                    else:
+                        dialect = Sniffer().sniff(first_line,delimiters=TestData.SEP_FIELDS)
+                        existe_header = Sniffer().has_header(first_line)
+                        writer = DictWriter(csvfile,TestData.CSV_HEADERS,dialect=dialect)
+
+                    if not existe_header:
+                        writer.writeheader()
+                    self.managementpage.do_click_apply_reset(int(i+1))
+                    sleep(2)
+                    self.managementpage.do_change_password(clave)
+                    hour_fin= datetime.strftime(now, "%H:%M")
+                    sleep(2)
+
+                    data = [date_ini,hour_ini,'',tname[i].text,tname[i].text,
+                            tuser[i].text,touname[i].text,
+                            TestData.REPORT['encargado'],
+                            "Whatsapp  (Propietario)","Whatsapp  (Propietario)",
+                            '\n'.join([TestData.REPORT['encargado'],
+                            f"{hour_fin} - Se reseteó la contraseña del usuario.",
+                            f"{hour_fin} - Se notificó la contraseña por telf."])]
+                    aux = {}
+                    for j in range(len(TestData.CSV_HEADERS)):
+                        aux[TestData.CSV_HEADERS[j]] = data[j]
+                    
+                    writer.writerow(aux)
+                print(f"\nla clave del usuario {user} es {clave}")
 
     def _get_password(self) -> str:
         faker = Faker()
@@ -73,10 +105,9 @@ class TestFlowReset(TestBase):
             else:
                 print(f"No se encontraron datos de entrada en {TestData.FILE_INPUT_DATA}")
                 raise Exception
-        except FileNotFoundError:
-            print(f"No se encontro el archivo de datos {TestData.FILE_INPUT_DATA} en el directorio del proyecto")
-        except:
-            print("Opss!! ocurrio un error")
+        except FileNotFoundError as e:
+            raise RuntimeError(f"No se encontro el archivo de datos {TestData.FILE_INPUT_DATA} en el directorio del proyecto") from e
+        except :
+            raise RuntimeError("Opss!! ocurrio un error")
         finally:
-            print("logouttt")
             self.managementpage.do_logout()
